@@ -1,16 +1,26 @@
 package pl.kedrabartosz.HomeBudget.version2.entities;
 
-import jakarta.persistence.Column;
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.NoArgsConstructor;
 
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 @Table(name = "item")
 @Entity
 public class ItemEntity {
     @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
     @Column(name = "name")
     private String name;
+    @OneToOne
+    @JoinColumn(name = "category_id")
+    private CategoryEntity categoryEntity;
+    @OneToOne
+    @JoinColumn(name = "quantity_id")
+    private QuantityEntity quantityEntity;
 }
