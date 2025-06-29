@@ -65,22 +65,22 @@ CREATE TABLE items_in_receipt
 );
 
 INSERT INTO person
-VALUES (15,'bartosz','andrzejewski','2004-05-04 12:00:00');
+VALUES (1, 'bartosz', 'andrzejewski', '2004-05-04 12:00:00');
 
 INSERT INTO category
-VALUES (33,'food','2004-05-04 12:00:00','2004-05-04 13:20:00');
+VALUES (1, 'food', '2004-05-04 12:00:00', '2004-05-04 13:20:00');
 
 INSERT INTO quantity
-VALUES (25, '50');
+VALUES (1, '50');
 
 INSERT INTO item
-VALUES (22,'apple',1,1);
+VALUES (1, 'apple', 1, 1);
 
 INSERT INTO cost
-VALUES (55,2.50,'2004-05-04 22:00:00',1);
+VALUES (1, 2.50, '2004-05-04 22:00:00', 1);
 
 INSERT INTO receipt
-VALUES (3,1,'2004-05-04 14:00:00',50);
+VALUES (1, 1, '2004-05-04 14:00:00', 50);
 
 INSERT INTO items_in_receipt
-VALUES (5,1,1,1);
+VALUES (1, 1, 1, 1);
