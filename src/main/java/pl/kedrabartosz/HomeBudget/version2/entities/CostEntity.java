@@ -16,7 +16,7 @@ public class CostEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private String id;
+    private Integer id;
     @Column(name = "price")
     private double price;
     @Column(name = "effective_date")

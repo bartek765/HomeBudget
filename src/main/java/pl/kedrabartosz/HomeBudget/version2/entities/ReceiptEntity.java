@@ -17,7 +17,7 @@ public class ReceiptEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private String id;
+    private Integer id;
     @Column(name = "purchased_at")
     private Instant purchasedAt;
     @Column(name = "total_cost")

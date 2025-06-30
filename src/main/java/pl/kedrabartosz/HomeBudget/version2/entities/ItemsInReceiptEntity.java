@@ -14,7 +14,7 @@ public class ItemsInReceiptEntity {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
-    private String id;
+    private Integer id;
     @Column(name = "quantity")
     private int quantity;
     @ManyToOne
