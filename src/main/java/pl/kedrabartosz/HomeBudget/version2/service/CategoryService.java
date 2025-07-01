@@ -21,7 +21,11 @@ public class CategoryService {
     }
 
     public CategoryEntity saveCategory(String name, Instant createdAt, Instant lastUpdatedAt) {
-     // TODO Fill In this Method.
+        CategoryEntity category = new CategoryEntity();
+        category.setName(name);
+        category.setCreatedAt(createdAt);
+        category.setLastUpdatedAt(lastUpdatedAt);
+        return categoryRepository.save(category);
     }
 
     public CategoryEntity updateCategory(String oldName, String newName) {
@@ -36,15 +40,27 @@ public class CategoryService {
     }
 
     public CategoryEntity getCategory(String name) {
-        // TODO Fill in this method
+        CategoryEntity category = categoryRepository.getByName(name);
+        if (category != null) {
+            return category;
+        } else {
+            System.out.println("Could not get this Category because doesn't exists" + name);
+            throw new IllegalArgumentException("Category not found: " + name);
+        }
     }
 
     public CategoryEntity deleteCategory(String name) {
-        // TODO Fill in this method. Do not create new native queries in Repository.
-
+        CategoryEntity toDelete = categoryRepository.getByName(name);
+        if (toDelete != null) {
+            categoryRepository.delete(toDelete);
+            return toDelete;
+        } else {
+            System.out.println("Could not delete this Category because doesn't exists" + name);
+            throw new IllegalArgumentException("Category not found: " + name);
+        }
     }
 
     public List<CategoryEntity> getAllCategories() {
-       // TODO Fill in this method
+        return categoryRepository.findAll();
     }
 }
