@@ -1,11 +1,11 @@
 package pl.kedrabartosz.HomeBudget.version2.service;
 
+import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.kedrabartosz.HomeBudget.version2.entities.CategoryEntity;
 import pl.kedrabartosz.HomeBudget.version2.entities.CategoryEntity;
 import pl.kedrabartosz.HomeBudget.version2.repositories.CategoryRepository;
 
@@ -20,8 +20,8 @@ public class CategoryService {
         this.categoryRepository = categoryRepository;
     }
 
-    public CategoryEntity saveCategory(String name) {
-        return categoryRepository.save(name);
+    public CategoryEntity saveCategory(String name, Instant createdAt, Instant lastUpdatedAt) {
+     // TODO Fill In this Method.
     }
 
     public CategoryEntity updateCategory(String oldName, String newName) {
@@ -36,24 +36,15 @@ public class CategoryService {
     }
 
     public CategoryEntity getCategory(String name) {
-        Optional<CategoryEntity> categoryOptional = categoryRepository.getCategory(name);
-        if (categoryOptional.isEmpty()) {
-            System.out.println("Could not get category with name " + name);
-            throw new IllegalArgumentException("Could not get category");
-        }
-        return categoryOptional.get();
+        // TODO Fill in this method
     }
 
     public CategoryEntity deleteCategory(String name) {
-        Optional<CategoryEntity> deletedCategoryOptional = categoryRepository.deleteCategory(name);
-        if (deletedCategoryOptional.isEmpty()) {
-            System.out.println("Could not delete category with name " + name);
-            throw new IllegalArgumentException("Could not delete category");
-        }
-        return deletedCategoryOptional.get();
+        // TODO Fill in this method. Do not create new native queries in Repository.
+
     }
 
     public List<CategoryEntity> getAllCategories() {
-        return categoryRepository.getAll();
+       // TODO Fill in this method
     }
 }
