@@ -7,7 +7,7 @@ import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import pl.kedrabartosz.HomeBudget.version1.Category;
 import pl.kedrabartosz.HomeBudget.version1.repository.CategoryRepository;
-import pl.kedrabartosz.HomeBudget.version1.service.CategoryService;
+import pl.kedrabartosz.HomeBudget.version2.service.CategoryService;
 
 import java.util.List;
 import java.util.Optional;

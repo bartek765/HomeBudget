@@ -9,6 +9,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.ConfigurableApplicationContext;
 import pl.kedrabartosz.HomeBudget.version2.entities.*;
 import pl.kedrabartosz.HomeBudget.version2.repositories.*;
+import pl.kedrabartosz.HomeBudget.version2.service.ItemService;
 
 @SpringBootApplication
 public class HomeBudgetApplication {
@@ -120,7 +121,7 @@ public class HomeBudgetApplication {
         // aby móc korzystać z costServicu nie możemy go robić (new CostService())!!, tylko
         // pozwalamy Springowi to zrobić i my chcemy tylko się dostać do tego beana, co on stworzył,
         // i na nim operować (ale nie sami go tworzyć)
-        pl.kedrabartosz.HomeBudget.version1.service.ItemService itemService = context.getBean(pl.kedrabartosz.HomeBudget.version1.service.ItemService.class);
+        ItemService itemService = context.getBean(ItemService.class);
 
         pl.kedrabartosz.HomeBudget.version1.Person me = new pl.kedrabartosz.HomeBudget.version1.Person("Bartosz");
 
