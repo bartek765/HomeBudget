@@ -43,24 +43,21 @@ public class CategoryService {
     }
 
     public CategoryEntity getCategory(String name) {
-        CategoryEntity category = categoryRepository.getByName(name);
-        if (category != null) {
-            return category;
-        } else {
-            System.out.println("Could not get this Category because doesn't exists" + name);
-            throw new IllegalArgumentException("Category not found: " + name);
-        }
+        return Optional.ofNullable(categoryRepository.getByName(name))
+                .orElseThrow(() -> {
+                    System.out.println("Could not get this Category because doesn't exist: " + name);
+                    return new IllegalArgumentException("Category not found: " + name);
+                });
     }
 
     public CategoryEntity deleteCategory(String name) {
-        CategoryEntity toDelete = categoryRepository.getByName(name);
-        if (toDelete != null) {
-            categoryRepository.delete(toDelete);
-            return toDelete;
-        } else {
-            System.out.println("Could not delete this Category because doesn't exists" + name);
-            throw new IllegalArgumentException("Category not found: " + name);
-        }
+        CategoryEntity categoryToDelete = Optional.ofNullable(categoryRepository.getByName(name))
+                .orElseThrow(() -> {
+                    System.out.println("Could not delete this Category because doesn't exist: " + name);
+                    return new IllegalArgumentException("Category not found: " + name);
+                });
+        categoryRepository.delete(categoryToDelete);
+        return categoryToDelete;
     }
 
     public List<CategoryEntity> getAllCategories() {
