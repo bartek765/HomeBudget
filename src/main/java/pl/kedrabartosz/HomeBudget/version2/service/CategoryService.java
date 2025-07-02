@@ -4,6 +4,7 @@ import java.time.Instant;
 import java.util.List;
 import java.util.Optional;
 
+import lombok.Builder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.kedrabartosz.HomeBudget.version2.entities.CategoryEntity;
@@ -21,22 +22,24 @@ public class CategoryService {
     }
 
     public CategoryEntity saveCategory(String name, Instant createdAt, Instant lastUpdatedAt) {
-        CategoryEntity category = new CategoryEntity();
-        category.setName(name);
-        category.setCreatedAt(createdAt);
-        category.setLastUpdatedAt(lastUpdatedAt);
+        CategoryEntity category = CategoryEntity.builder()
+                .name(name)
+                .createdAt(createdAt)
+                .lastUpdatedAt(lastUpdatedAt)
+                .build();
         return categoryRepository.save(category);
     }
 
     public CategoryEntity updateCategory(String oldName, String newName) {
-        CategoryEntity posibleCategory = categoryRepository.getByName(oldName);
-        if (posibleCategory != null) {
-            posibleCategory.setName(newName);
-            return posibleCategory;
-        } else {
-            System.out.println("Could not update this Category because doesn't exists" + oldName);
-            throw new IllegalArgumentException("Could not update this Category");
-        }
+        return Optional.ofNullable(categoryRepository.getByName(oldName))
+                .map(categoryEntity -> {
+                    categoryEntity.setName(newName);
+                    return categoryEntity;
+                })
+                .orElseThrow(() -> {
+                    System.out.println("Could not update this Category because doesn't exists " + oldName);
+                    return new IllegalArgumentException("Could not update this Category");
+                });
     }
 
     public CategoryEntity getCategory(String name) {
