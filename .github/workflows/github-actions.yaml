@@ -1,45 +1,20 @@
 name: HomeBudgetActions
-
 on:
   pull_request:
     paths:
       - '**'
-
 jobs:
   HomeBudget:
     name: "home budget build"
     runs-on: ubuntu-latest
-
-    services:
-      postgres:
-        image: postgres:14
-        ports:
-          - 5555:5432
-        env:
-          POSTGRES_DB: homebudget_db
-          POSTGRES_USER: ${{ secrets.DB_USERNAME }}
-          POSTGRES_PASSWORD: ${{ secrets.DB_PASSWORD }}
-        options: >-
-          --health-cmd pg_isready
-          --health-interval 10s
-          --health-timeout 5s
-          --health-retries 5
-
-    env:
-      DB_USERNAME: ${{ secrets.DB_USERNAME }}
-      DB_PASSWORD: ${{ secrets.DB_PASSWORD }}
-
     steps:
       - uses: actions/checkout@v2
-
       - name: "setup jdk"
         uses: actions/setup-java@v2
         with:
           java-version: '23'
           distribution: 'temurin'
-
       - name: "change wrapper permissions"
         run: chmod +x ./gradlew
-
       - name: "build with gradle"
-        run: ./gradlew clean build
+        run: ./gradlew build
