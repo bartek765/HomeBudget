@@ -1,4 +1,4 @@
-package pl.kedrabartosz.HomeBudget.version1.service;
+package pl.kedrabartosz.HomeBudget.version2.service;
 
 import java.util.List;
 import java.util.Optional;
