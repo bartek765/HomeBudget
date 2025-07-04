@@ -5,16 +5,16 @@ on:
       - '**'
 jobs:
   HomeBudget:
-    name: "HomeBudget"
+    name: "home budget build"
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v2
-      - name: "SetUpJava"
+      - name: "setup jdk"
         uses: actions/setup-java@v2
         with:
           java-version: '21'
           distribution: 'temurin'
-      - name: "ChangePermissionForGradle"
+      - name: "change wrapper permissions"
         run: chmod +x ./gradlew
-      - name: "BuildHomeBudget"
+      - name: "build with gradle"
         run: ./gradlew build
