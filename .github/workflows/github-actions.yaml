@@ -1,0 +1,18 @@
+name: HomeBudgetActions
+on:
+  pull_request:
+    paths:
+      - '**'
+jobs:
+  HomeBudget:
+    name: "HomeBudget"
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v2
+      - name: "SetUpJava"
+        uses: actions/setup-java@v2
+        with:
+          java-version: '21'
+          distribution: 'temurin'
+      - name: "BuildHomeBudget"
+        run: ./gradlew build
