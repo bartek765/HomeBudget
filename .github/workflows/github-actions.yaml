@@ -14,5 +14,7 @@ jobs:
         with:
           java-version: '21'
           distribution: 'temurin'
+      - name: "ChangePermissionForGradle"
+        run: chmod +x ./gradlew
       - name: "BuildHomeBudget"
         run: ./gradlew build
