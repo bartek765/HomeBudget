@@ -15,7 +15,11 @@ import java.util.Optional;
 
 public class FileBasedCategoryRepository implements CategoryRepository {
 
-    private static final String CSV_PATH = "src/main/resources/categories.csv";
+    public FileBasedCategoryRepository(String CSV_PATH) {
+        this.CSV_PATH = CSV_PATH;
+    }
+
+    private String CSV_PATH = "src/main/resources/categories.csv";
 
     @Override
     public Category save(String name) {
@@ -129,9 +133,7 @@ public class FileBasedCategoryRepository implements CategoryRepository {
         BufferedWriter writer = null;
         try {
             Path path = Paths.get(
-                    getClass().getClassLoader()
-                            .getResource(CSV_PATH)
-                            .toURI()
+                    CSV_PATH
             );
 
             writer = Files.newBufferedWriter(path);
@@ -140,7 +142,7 @@ public class FileBasedCategoryRepository implements CategoryRepository {
                 writer.newLine();
             }
 
-        } catch (IOException | URISyntaxException e) {
+        } catch (IOException e) {
             System.err.println("Error writing CSV file: " + e.getMessage());
             return Optional.empty();
         } finally {
@@ -170,14 +172,13 @@ public class FileBasedCategoryRepository implements CategoryRepository {
 
             String line;
             while ((line = reader.readLine()) != null) {
-                System.out.println(line);
                 String[] tokens = line.split(",");
                 int id = Integer.parseInt(tokens[0].trim());
                 String name = tokens[1].trim();
                 category.add(new Category(id, name));
             }
 
-        } catch (IOException  e) {
+        } catch (IOException e) {
             System.err.println("Error reading CSV file: " + e.getMessage());
         } finally {
             if (reader != null) {
