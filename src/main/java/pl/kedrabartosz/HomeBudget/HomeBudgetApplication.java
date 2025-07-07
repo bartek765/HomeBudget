@@ -102,14 +102,17 @@ public class HomeBudgetApplication {
         //System.out.println(costRepository.getAll());
 
         // 1. new
-        pl.kedrabartosz.HomeBudget.version1.repository.ItemRepository itemRepository = new pl.kedrabartosz.HomeBudget.version1.repository.ListBasedItemRepository(new ArrayList<>());
+        var itemRepository =
+                new pl.kedrabartosz.HomeBudget.version1.repository.ListBasedItemRepository(new ArrayList<>());
 
         // 2. builder
-        pl.kedrabartosz.HomeBudget.version1.repository.ItemRepository itemRepositoryBuilder = pl.kedrabartosz.HomeBudget.version1.repository.ListBasedItemRepository.builder().build();
+        pl.kedrabartosz.HomeBudget.version1.repository.ItemRepository itemRepositoryBuilder =
+                pl.kedrabartosz.HomeBudget.version1.repository.ListBasedItemRepository.builder().build();
 
         // 3. Factory
 
-        pl.kedrabartosz.HomeBudget.version1.repository.ItemRepository itemRepositoryFactory = pl.kedrabartosz.HomeBudget.version1.repository.ItemRepositoryFactory.createCostRepository();
+        pl.kedrabartosz.HomeBudget.version1.repository.ItemRepository itemRepositoryFactory =
+                pl.kedrabartosz.HomeBudget.version1.repository.ItemRepositoryFactory.createCostRepository();
 
 
         // IoC - Inversion of Control, czyli nie my tworzymy obiekty tylko zlecamy to frameworkpwi
@@ -126,8 +129,10 @@ public class HomeBudgetApplication {
         pl.kedrabartosz.HomeBudget.version1.Person me = new pl.kedrabartosz.HomeBudget.version1.Person("Bartosz");
 
 
-        pl.kedrabartosz.HomeBudget.version1.Item newItem = itemService.saveItem("Jewelry", 250.00, pl.kedrabartosz.HomeBudget.version1.Category.builder().build());
-        pl.kedrabartosz.HomeBudget.version1.Item newItem5 = itemService.saveItem("Car", 4000, pl.kedrabartosz.HomeBudget.version1.Category.builder().build());
+        pl.kedrabartosz.HomeBudget.version1.Item newItem =
+                itemService.saveItem("Jewelry", 250.00, pl.kedrabartosz.HomeBudget.version1.Category.builder().build());
+        pl.kedrabartosz.HomeBudget.version1.Item newItem5 =
+                itemService.saveItem("Car", 4000, pl.kedrabartosz.HomeBudget.version1.Category.builder().build());
 
         if (itemService.doesItemExits("Pencil")) {
             System.out.println(true);
@@ -135,14 +140,16 @@ public class HomeBudgetApplication {
             System.out.println(false);
         }
 
-        pl.kedrabartosz.HomeBudget.version1.Item newItem6 = itemService.saveItem("Pencil", 5, pl.kedrabartosz.HomeBudget.version1.Category.builder().build());
+        pl.kedrabartosz.HomeBudget.version1.Item newItem6 =
+                itemService.saveItem("Pencil", 5, pl.kedrabartosz.HomeBudget.version1.Category.builder().build());
         if (itemService.doesItemExits("Pencil")) {
             System.out.println(true);
         } else {
             System.out.println(false);
         }
 
-        pl.kedrabartosz.HomeBudget.version1.repository.CategoryRepository fileBasedCategoryRepository = new pl.kedrabartosz.HomeBudget.version1.repository.FileBasedCategoryRepository();
+        pl.kedrabartosz.HomeBudget.version1.repository.CategoryRepository fileBasedCategoryRepository =
+                new pl.kedrabartosz.HomeBudget.version1.repository.FileBasedCategoryRepository("src/main/resources/categories.csv");
         pl.kedrabartosz.HomeBudget.version1.Category buildHome = fileBasedCategoryRepository.save("budowadomu");
         pl.kedrabartosz.HomeBudget.version1.Category jewelry = fileBasedCategoryRepository.save("jewelery");
         System.out.println(buildHome);
@@ -150,7 +157,8 @@ public class HomeBudgetApplication {
 
         //shopping cart
 
-        pl.kedrabartosz.HomeBudget.version1.service.ReceiptService cartService = context.getBean(pl.kedrabartosz.HomeBudget.version1.service.ReceiptService.class);
+        pl.kedrabartosz.HomeBudget.version1.service.ReceiptService cartService =
+                context.getBean(pl.kedrabartosz.HomeBudget.version1.service.ReceiptService.class);
 
 
         List<pl.kedrabartosz.HomeBudget.version1.Receipt> all = cartService.getShoppingCarts(me);
