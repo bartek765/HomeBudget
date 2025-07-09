@@ -1,4 +1,4 @@
-package pl.kedrabartosz.HomeBudget.service;
+package pl.kedrabartosz.HomeBudget.version2.service;
 
 import pl.kedrabartosz.HomeBudget.version1.Category;
 import pl.kedrabartosz.HomeBudget.version1.repository.CategoryRepository;
