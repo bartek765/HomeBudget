@@ -5,60 +5,51 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.kedrabartosz.HomeBudget.version1.Category;
-import pl.kedrabartosz.HomeBudget.version1.Item;
-import pl.kedrabartosz.HomeBudget.version1.repository.ItemRepository;
+import pl.kedrabartosz.HomeBudget.version2.entities.CategoryEntity;
+import pl.kedrabartosz.HomeBudget.version2.entities.ItemEntity;
+import pl.kedrabartosz.HomeBudget.version2.repositories.ItemRepository;
+
 
 @Service
 public class ItemService {
 
-    private ItemRepository listBasedRepository;
+    private ItemRepository itemRepository;
 
-    public ItemService(@Autowired ItemRepository listBasedRepository) {
+
+    public ItemService(@Autowired ItemRepository itemRepository) {
         // = to przypisanie = to jest włąśnie wstrzykiwanie zależności
-        this.listBasedRepository = listBasedRepository;
+        this.itemRepository = itemRepository;
     }
 
-    public Item saveItem(String name, double price, Category category) {
-        return listBasedRepository.addItem(name, price, category);
+    public ItemEntity saveItem(String name, int quantityId, CategoryEntity category) {
+        ItemEntity itemEntity = ItemEntity.builder()
+                .categoryEntity(category)
+                .quantityEntity(null) //TODO
+                .name(name)
+                .build();
+        return itemRepository.save(itemEntity);
     }
 
-    public Item updateItem(String oldProduct, String newProduct, double newPrice) {
-        Optional<Item> updateItemOptional = listBasedRepository.updateItem(oldProduct, newProduct, newPrice);
-        if (updateItemOptional.isEmpty()) {
-            System.out.println("Could not update item with oldProduct" + oldProduct);
-            throw new IllegalArgumentException("Could not update item");
-        }
-        return updateItemOptional.get();
-    }
 
-    public boolean doesItemExits(String product) {
-        Optional<Item> itemOptional = listBasedRepository.getItemByName(product);
+    public boolean doesItemExits(int itemId) {
+        Optional<ItemEntity> itemOptional = itemRepository.findById(itemId);
         if (itemOptional.isPresent()) {
             return true;
         }
         return false;
     }
 
-    public Item getItem(String product) {
-        Optional<Item> itemOptional = listBasedRepository.getItemByName(product);
+    public ItemEntity getItem(int itemId) {
+        Optional<ItemEntity> itemOptional = itemRepository.findById(itemId);
         if (itemOptional.isEmpty()) {
-            System.out.println("Could not get item with product" + product);
+            System.out.println("Could not get item with product" + itemId);
             throw new IllegalArgumentException("Could not get item");
         }
         return itemOptional.get();
     }
 
-    public Item deleteItem(String itemName) {
-        Optional<Item> deletedItemOptional = listBasedRepository.deleteItem(itemName);
-        if (deletedItemOptional.isEmpty()) {
-            System.out.println("Could not delete item with name " + itemName);
-            throw new IllegalArgumentException("Could not delete item");
-        }
-        return deletedItemOptional.get();
-    }
 
-    public List<Item> getAllItems() {
-        return listBasedRepository.getAll();
+    public List<ItemEntity> getAllItems() {
+        return itemRepository.findAll();
     }
 }
