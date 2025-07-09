@@ -1,6 +1,7 @@
 package pl.kedrabartosz.HomeBudget.version2.entities;
 
 import jakarta.persistence.*;
+import java.util.Objects;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
@@ -23,4 +24,20 @@ public class PersonEntity {
     private String lastName;
     @Column(name = "joined_at")
     private Instant joinedAt;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
+        PersonEntity that = (PersonEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(
+            lastName,
+            that.lastName
+        ) && Objects.equals(joinedAt, that.joinedAt);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, firstName, lastName, joinedAt);
+    }
 }
