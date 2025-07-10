@@ -4,9 +4,10 @@ import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.Setter;
 
 import java.time.Instant;
-
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
