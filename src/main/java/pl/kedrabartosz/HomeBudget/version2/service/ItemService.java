@@ -67,4 +67,8 @@ public class ItemService {
 
         itemRepository.delete(item);
     }
+
+    public boolean doesItemExits(int itemId) {
+        return itemRepository.existsById(itemId);
+    }
 }
