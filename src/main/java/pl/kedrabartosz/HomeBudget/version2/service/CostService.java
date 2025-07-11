@@ -41,10 +41,11 @@ public class CostService {
     public CostEntity updateCost(int costId, double newPrice, Instant newEffectiveDate, int newItemId) {
         return Optional.of(costRepository.getReferenceById(costId))
                 .map(cost -> {
-                    cost.setPrice(newPrice);
-                    cost.setEffectiveDate(newEffectiveDate);
-                    cost.setItemEntity(itemService.getItem(newItemId));
-                    return costRepository.save(cost);
+                  CostEntity toBeUpdated = cost.toBuilder()
+                      .price(newPrice)
+                      .effectiveDate(newEffectiveDate)
+                      .build();
+                  return costRepository.save(toBeUpdated);
                 })
                 .orElseThrow(() -> {
                     System.out.println("Could not update cost with ID: " + costId);

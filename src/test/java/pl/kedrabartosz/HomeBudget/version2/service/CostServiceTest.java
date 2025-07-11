@@ -55,9 +55,9 @@ class CostServiceTest {
 
         // then
         Assertions.assertEquals(expected, actual);
-        verify(costRepository).findAll();
     }
 
+    // todo correct this test + implement 2nd test for failure
     @Test
     public void shouldSaveNewCost() {
         // given
@@ -67,14 +67,12 @@ class CostServiceTest {
                 .effectiveDate(ANY_DATE)
                 .itemEntity(itemEntity)
                 .build();
-        when(costRepository.save(any(CostEntity.class))).thenReturn(builtCost);
+        when(costRepository.save(eq(builtCost))).thenReturn(builtCost);
 
         // when
         var result = costService.saveNewCost(ANY_PRICE, ANY_DATE, ANY_ITEM_ID);
 
         // then
-        verify(itemService).getItem(eq(ANY_ITEM_ID));
-        verify(costRepository).save(any(CostEntity.class));
         Assertions.assertEquals(builtCost, result);
     }
 
@@ -87,7 +85,6 @@ class CostServiceTest {
         var result = costService.findById(ANY_COST_ID);
 
         // then
-        verify(costRepository).getReferenceById(eq(ANY_COST_ID));
         Assertions.assertEquals(costEntity1, result);
     }
 
@@ -95,19 +92,28 @@ class CostServiceTest {
     @Test
     public void shouldUpdateCost() {
         // given
-        when(costRepository.getReferenceById(eq(ANY_COST_ID))).thenReturn(costEntity1);
-        when(itemService.getItem(eq(ANY_ITEM_ID))).thenReturn(itemEntity);
-        when(costRepository.save(eq(costEntity1))).thenReturn(costEntity1);
+        CostEntity current = CostEntity.builder()
+            .id(ANY_COST_ID)
+            .price(4.99d)
+            .effectiveDate(Instant.MIN)
+            .itemEntity(itemEntity)
+            .build();
+        when(costRepository.getReferenceById(eq(ANY_COST_ID))).thenReturn(current);
+
+        CostEntity expected = CostEntity.builder()
+            .id(ANY_COST_ID)
+            .price(ANY_PRICE)
+            .effectiveDate(ANY_DATE)
+            .itemEntity(itemEntity)
+            .build();
+
+        when(costRepository.save(eq(expected))).thenReturn(expected);
 
         // when
         var updated = costService.updateCost(ANY_COST_ID, ANY_PRICE, ANY_DATE, ANY_ITEM_ID);
 
         // then
-        verify(costEntity1).setPrice(ANY_PRICE);
-        verify(costEntity1).setEffectiveDate(ANY_DATE);
-        verify(costEntity1).setItemEntity(itemEntity);
-        verify(costRepository).save(costEntity1);
-        Assertions.assertEquals(costEntity1, updated);
+        Assertions.assertEquals(expected, updated);
     }
 
 

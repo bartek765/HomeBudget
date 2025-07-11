@@ -1,5 +1,6 @@
 package pl.kedrabartosz.HomeBudget.version2.service;
 
+import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
@@ -43,13 +44,23 @@ class ItemServiceTest {
     @Test
     void shouldSaveItem() {
         when(quantityService.getQuantity(1)).thenReturn(quantityEntity);
-        when(itemRepository.save(any(ItemEntity.class))).thenReturn(itemEntity);
+        when(itemRepository.save(eq(itemEntity))).thenReturn(itemEntity);
 
         var result = itemService.saveItem("TestItem", 1, category);
 
         verify(quantityService).getQuantity(1);
-        verify(itemRepository).save(any(ItemEntity.class));
+        verify(itemRepository).save(eq(itemEntity));
         assertEquals(itemEntity, result);
+    }
+
+    @Test
+    void shouldSaveItemsd() {
+        when(quantityService.getQuantity(1)).thenThrow(new IllegalArgumentException());
+        when(itemRepository.save(any(ItemEntity.class))).thenReturn(itemEntity);
+
+        Assertions.assertThrows(IllegalArgumentException.class, () -> itemService.saveItem("TestItem", 1, category));
+
+        verify(itemRepository, times(0)).save(any(ItemEntity.class));
     }
 
     @Test
