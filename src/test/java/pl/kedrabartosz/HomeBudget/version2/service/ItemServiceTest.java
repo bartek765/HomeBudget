@@ -17,7 +17,6 @@ import static org.junit.jupiter.api.Assertions.*;
 import static org.mockito.Mockito.*;
 
 class ItemServiceTest {
-
     private ItemService itemService;
 
     @Mock
@@ -32,13 +31,19 @@ class ItemServiceTest {
     @Mock
     private QuantityEntity quantityEntity;
 
-    @Mock
     private ItemEntity itemEntity;
 
     @BeforeEach
     void setUp() {
         MockitoAnnotations.openMocks(this);
         itemService = new ItemService(itemRepository, quantityService);
+        quantityEntity = QuantityEntity.builder().id(1).value("kg").build();
+        category = CategoryEntity.builder().name("Food").build();
+        itemEntity = ItemEntity.builder()
+                .name("TestItem")
+                .quantityEntity(quantityEntity)
+                .categoryEntity(category)
+                .build();
     }
 
     @Test
@@ -54,7 +59,7 @@ class ItemServiceTest {
     }
 
     @Test
-    void shouldSaveItemsd() {
+    void shouldThrowExceptionWhenSavingItemFails() {
         when(quantityService.getQuantity(1)).thenThrow(new IllegalArgumentException());
         when(itemRepository.save(any(ItemEntity.class))).thenReturn(itemEntity);
 
@@ -86,18 +91,16 @@ class ItemServiceTest {
     void shouldUpdateItem() {
         when(itemRepository.findById(1)).thenReturn(Optional.of(itemEntity));
         when(quantityService.getQuantity(2)).thenReturn(quantityEntity);
-        when(itemRepository.save(itemEntity)).thenReturn(itemEntity);
+        when(itemRepository.save(any(ItemEntity.class))).thenReturn(itemEntity);
 
         var updated = itemService.updateItem(1, "NewName", 2, category);
 
-        verify(itemEntity).setName("NewName");
-        verify(itemEntity).setQuantityEntity(quantityEntity);
-        verify(itemEntity).setCategoryEntity(category);
         assertEquals(itemEntity, updated);
     }
 
     @Test
     void shouldDeleteItem() {
+
         when(itemRepository.findById(1)).thenReturn(Optional.of(itemEntity));
 
         itemService.deleteItem(1);

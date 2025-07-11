@@ -47,10 +47,12 @@ public class ItemService {
     public ItemEntity updateItem(int itemId, String newName, int newQuantityId, CategoryEntity newCategory) {
         return itemRepository.findById(itemId)
                 .map(item -> {
-                    item.setName(newName);
-                    item.setQuantityEntity(quantityService.getQuantity(newQuantityId));
-                    item.setCategoryEntity(newCategory);
-                    return itemRepository.save(item);
+                    ItemEntity toBeUpdated = item.toBuilder()
+                            .name(newName)
+                            .quantityEntity(quantityService.getQuantity(newQuantityId))
+                            .categoryEntity(newCategory)
+                            .build();
+                    return itemRepository.save(toBeUpdated);
                 })
                 .orElseThrow(() -> {
                     System.out.println("Could not update item with ID: " + itemId);

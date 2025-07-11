@@ -57,16 +57,33 @@ class CostServiceTest {
         Assertions.assertEquals(expected, actual);
     }
 
-    // todo correct this test + implement 2nd test for failure
+    @Test
+    public void shouldThrowExceptionWhenItemNotFound() {
+        // given
+        when(itemService.doesItemExits(eq(ANY_ITEM_ID))).thenReturn(false);
+
+        // when + then
+        Assertions.assertThrows(IllegalArgumentException.class, () ->
+                costService.saveNewCost(ANY_PRICE, ANY_DATE, ANY_ITEM_ID)
+        );
+
+        verify(itemService).doesItemExits(ANY_ITEM_ID);
+        verifyNoMoreInteractions(itemService);
+        verifyNoInteractions(costRepository);
+    }
+
     @Test
     public void shouldSaveNewCost() {
         // given
+        when(itemService.doesItemExits(eq(ANY_ITEM_ID))).thenReturn(true);
         when(itemService.getItem(eq(ANY_ITEM_ID))).thenReturn(itemEntity);
+
         CostEntity builtCost = CostEntity.builder()
                 .price(ANY_PRICE)
                 .effectiveDate(ANY_DATE)
                 .itemEntity(itemEntity)
                 .build();
+
         when(costRepository.save(eq(builtCost))).thenReturn(builtCost);
 
         // when
@@ -93,19 +110,19 @@ class CostServiceTest {
     public void shouldUpdateCost() {
         // given
         CostEntity current = CostEntity.builder()
-            .id(ANY_COST_ID)
-            .price(4.99d)
-            .effectiveDate(Instant.MIN)
-            .itemEntity(itemEntity)
-            .build();
+                .id(ANY_COST_ID)
+                .price(4.99d)
+                .effectiveDate(Instant.MIN)
+                .itemEntity(itemEntity)
+                .build();
         when(costRepository.getReferenceById(eq(ANY_COST_ID))).thenReturn(current);
 
         CostEntity expected = CostEntity.builder()
-            .id(ANY_COST_ID)
-            .price(ANY_PRICE)
-            .effectiveDate(ANY_DATE)
-            .itemEntity(itemEntity)
-            .build();
+                .id(ANY_COST_ID)
+                .price(ANY_PRICE)
+                .effectiveDate(ANY_DATE)
+                .itemEntity(itemEntity)
+                .build();
 
         when(costRepository.save(eq(expected))).thenReturn(expected);
 
