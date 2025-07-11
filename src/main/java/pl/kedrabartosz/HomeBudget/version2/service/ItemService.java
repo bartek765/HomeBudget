@@ -23,12 +23,16 @@ public class ItemService {
     }
 
     public ItemEntity saveItem(String name, int quantityId, CategoryEntity category) {
-        ItemEntity itemEntity = ItemEntity.builder()
-                .categoryEntity(category)
-                .quantityEntity(quantityService.getQuantity(quantityId))
-                .name(name)
-                .build();
-        return itemRepository.save(itemEntity);
+        if (quantityService.doesQuantityExist(quantityId)) {
+            ItemEntity itemEntity = ItemEntity.builder()
+                    .categoryEntity(category)
+                    .quantityEntity(quantityService.getQuantity(quantityId))
+                    .name(name)
+                    .build();
+            return itemRepository.save(itemEntity);
+        }
+        System.out.println("Could not find quantity with ID: " + quantityId);
+        throw new IllegalArgumentException("Quantity not found");
     }
 
     public ItemEntity getItem(int itemId) {

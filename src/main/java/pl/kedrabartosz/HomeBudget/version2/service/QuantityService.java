@@ -25,4 +25,8 @@ public class QuantityService {
     public List<QuantityEntity> getAllQuantities() {
         return quantityRepository.findAll();
     }
+
+    public boolean doesQuantityExist(int id) {
+        return quantityRepository.existsById(id);
+    }
 }

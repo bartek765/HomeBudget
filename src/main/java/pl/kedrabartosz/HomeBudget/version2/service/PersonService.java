@@ -16,11 +16,17 @@ public class PersonService {
     }
 
     public PersonEntity saveNewPerson(String personName, String personLastName, Instant joinedAt) {
+        if (personName == null || personName.isBlank() ||
+                personLastName == null || personLastName.isBlank()) {
+            throw new IllegalArgumentException("First name and last name must not be empty");
+        }
+
         PersonEntity person = PersonEntity.builder()
                 .firstName(personName)
                 .lastName(personLastName)
                 .joinedAt(joinedAt)
                 .build();
+
         return personRepository.save(person);
     }
 

@@ -48,6 +48,7 @@ class ItemServiceTest {
 
     @Test
     void shouldSaveItem() {
+        when(quantityService.doesQuantityExist(1)).thenReturn(true);
         when(quantityService.getQuantity(1)).thenReturn(quantityEntity);
         when(itemRepository.save(eq(itemEntity))).thenReturn(itemEntity);
 
