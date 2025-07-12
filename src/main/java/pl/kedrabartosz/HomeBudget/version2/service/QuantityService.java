@@ -1,6 +1,7 @@
 package pl.kedrabartosz.HomeBudget.version2.service;
 
 import lombok.AllArgsConstructor;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import pl.kedrabartosz.HomeBudget.version2.entities.QuantityEntity;
 import pl.kedrabartosz.HomeBudget.version2.repositories.QuantityRepository;
@@ -12,7 +13,7 @@ import java.util.Optional;
 @Service
 public class QuantityService {
 
-    private final QuantityRepository quantityRepository;
+    private final @Autowired QuantityRepository quantityRepository;
 
     public QuantityEntity getQuantity(int quantityId) {
         return Optional.of(quantityRepository.getReferenceById(quantityId))

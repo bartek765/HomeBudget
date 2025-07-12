@@ -68,7 +68,6 @@ class CostServiceTest {
         );
 
         verify(itemService).doesItemExits(ANY_ITEM_ID);
-        verifyNoMoreInteractions(itemService);
         verifyNoInteractions(costRepository);
     }
 

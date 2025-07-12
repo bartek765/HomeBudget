@@ -51,11 +51,17 @@ public class ItemService {
     public ItemEntity updateItem(int itemId, String newName, int newQuantityId, CategoryEntity newCategory) {
         return itemRepository.findById(itemId)
                 .map(item -> {
+                    if (!quantityService.doesQuantityExist(newQuantityId)) {
+                        System.out.println("Could not update item - quantity with ID " + newQuantityId + " not found.");
+                        throw new IllegalArgumentException("Quantity not found");
+                    }
+
                     ItemEntity toBeUpdated = item.toBuilder()
                             .name(newName)
                             .quantityEntity(quantityService.getQuantity(newQuantityId))
                             .categoryEntity(newCategory)
                             .build();
+
                     return itemRepository.save(toBeUpdated);
                 })
                 .orElseThrow(() -> {
