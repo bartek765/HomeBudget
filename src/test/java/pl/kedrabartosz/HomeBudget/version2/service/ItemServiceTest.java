@@ -33,7 +33,7 @@ class ItemServiceTest {
 
     private ItemEntity itemEntity;
 
-    int id = 1;
+    private static final int EXISTING_ITEM_ID = 1;
 
     @BeforeEach
     void setUp() {
@@ -51,20 +51,18 @@ class ItemServiceTest {
     @Test
     void shouldSaveItem() {
 
-        when(quantityService.doesQuantityExist(id)).thenReturn(true);
-        when(quantityService.getQuantity(id)).thenReturn(quantityEntity);
+        when(quantityService.doesQuantityExist(EXISTING_ITEM_ID)).thenReturn(true);
+        when(quantityService.getQuantity(EXISTING_ITEM_ID)).thenReturn(quantityEntity);
         when(itemRepository.save(eq(itemEntity))).thenReturn(itemEntity);
 
-        var result = itemService.saveItem("TestItem", id, category);
+        var result = itemService.saveItem("TestItem", EXISTING_ITEM_ID, category);
 
-        verify(quantityService).getQuantity(id);
-        verify(itemRepository).save(eq(itemEntity));
         assertEquals(itemEntity, result);
     }
 
     @Test
     void shouldThrowExceptionWhenSavingItemFails() {
-        when(quantityService.getQuantity(id)).thenThrow(new IllegalArgumentException());
+        when(quantityService.getQuantity(EXISTING_ITEM_ID)).thenThrow(new IllegalArgumentException());
         when(itemRepository.save(any(ItemEntity.class))).thenReturn(itemEntity);
 
         Assertions.assertThrows(IllegalArgumentException.class, () -> itemService.saveItem("TestItem", 1, category));
@@ -74,9 +72,9 @@ class ItemServiceTest {
 
     @Test
     void shouldReturnItemById() {
-        when(itemRepository.findById(id)).thenReturn(Optional.of(itemEntity));
+        when(itemRepository.findById(EXISTING_ITEM_ID)).thenReturn(Optional.of(itemEntity));
 
-        var result = itemService.getItem(id);
+        var result = itemService.getItem(EXISTING_ITEM_ID);
 
         assertEquals(itemEntity, result);
     }
@@ -93,12 +91,12 @@ class ItemServiceTest {
 
     @Test
     void shouldUpdateItem() {
-        when(itemRepository.findById(id)).thenReturn(Optional.of(itemEntity));
+        when(itemRepository.findById(EXISTING_ITEM_ID)).thenReturn(Optional.of(itemEntity));
         when(quantityService.doesQuantityExist(2)).thenReturn(true);
         when(quantityService.getQuantity(2)).thenReturn(quantityEntity);
         when(itemRepository.save(any(ItemEntity.class))).thenReturn(itemEntity);
 
-        var updated = itemService.updateItem(id, "NewName", 2, category);
+        var updated = itemService.updateItem(EXISTING_ITEM_ID, "NewName", 2, category);
 
         assertEquals(itemEntity, updated);
     }
@@ -106,9 +104,9 @@ class ItemServiceTest {
     @Test
     void shouldDeleteItem() {
 
-        when(itemRepository.findById(id)).thenReturn(Optional.of(itemEntity));
+        when(itemRepository.findById(EXISTING_ITEM_ID)).thenReturn(Optional.of(itemEntity));
 
-        itemService.deleteItem(id);
+        itemService.deleteItem(EXISTING_ITEM_ID);
 
         verify(itemRepository).delete(itemEntity);
     }

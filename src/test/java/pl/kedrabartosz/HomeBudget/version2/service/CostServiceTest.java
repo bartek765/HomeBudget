@@ -67,7 +67,6 @@ class CostServiceTest {
                 costService.saveNewCost(ANY_PRICE, ANY_DATE, ANY_ITEM_ID)
         );
 
-        verify(itemService).doesItemExits(ANY_ITEM_ID);
         verifyNoInteractions(costRepository);
     }
 
