@@ -95,7 +95,7 @@ public class HomeBudgetApplication {
 
     }
 
-    private static void versionOne(String[] args) {
+   /* private static void versionOne(String[] args) {
         // SpringApplication.run(HomeBudgetApplication.class, args);
         // CostRepository costRepository = new ListBasedRepository();
         //costRepository.addCost();
@@ -175,7 +175,7 @@ public class HomeBudgetApplication {
         //@Value - Umożliwia wstrzykiwanie wartości (np. z plików konfiguracyjnych) do pól klasy.
         // @Resource pochodzi od javy a @Autowired od springa
         //Autowired wstrzykuje na podstawie typu a Resource na postawie nazwy
-    }
+    }*/
 }
 // dokonczyc to implemetnowac interfejs Food i tez klasy gdzie beda implementowane te rzeczy! (zrobioone)
 // (nazwa jedzenia resturacja czy wyjscia na jedzenie) (zrobione)

@@ -5,60 +5,82 @@ import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import pl.kedrabartosz.HomeBudget.version1.Category;
-import pl.kedrabartosz.HomeBudget.version1.Item;
-import pl.kedrabartosz.HomeBudget.version1.repository.ItemRepository;
+import pl.kedrabartosz.HomeBudget.version2.entities.CategoryEntity;
+import pl.kedrabartosz.HomeBudget.version2.entities.ItemEntity;
+import pl.kedrabartosz.HomeBudget.version2.repositories.ItemRepository;
+
 
 @Service
 public class ItemService {
+    private ItemRepository itemRepository;
+    private QuantityService quantityService;
 
-    private ItemRepository listBasedRepository;
 
-    public ItemService(@Autowired ItemRepository listBasedRepository) {
+    public ItemService(@Autowired ItemRepository itemRepository, @Autowired QuantityService quantityService) {
         // = to przypisanie = to jest włąśnie wstrzykiwanie zależności
-        this.listBasedRepository = listBasedRepository;
+        this.itemRepository = itemRepository;
+        this.quantityService = quantityService;
     }
 
-    public Item saveItem(String name, double price, Category category) {
-        return listBasedRepository.addItem(name, price, category);
-    }
-
-    public Item updateItem(String oldProduct, String newProduct, double newPrice) {
-        Optional<Item> updateItemOptional = listBasedRepository.updateItem(oldProduct, newProduct, newPrice);
-        if (updateItemOptional.isEmpty()) {
-            System.out.println("Could not update item with oldProduct" + oldProduct);
-            throw new IllegalArgumentException("Could not update item");
+    public ItemEntity saveItem(String name, int quantityId, CategoryEntity category) {
+        if (quantityService.doesQuantityExist(quantityId)) {
+            ItemEntity itemEntity = ItemEntity.builder()
+                    .categoryEntity(category)
+                    .quantityEntity(quantityService.getQuantity(quantityId))
+                    .name(name)
+                    .build();
+            return itemRepository.save(itemEntity);
         }
-        return updateItemOptional.get();
+        System.out.println("Could not find quantity with ID: " + quantityId);
+        throw new IllegalArgumentException("Quantity not found");
     }
 
-    public boolean doesItemExits(String product) {
-        Optional<Item> itemOptional = listBasedRepository.getItemByName(product);
-        if (itemOptional.isPresent()) {
-            return true;
-        }
-        return false;
-    }
-
-    public Item getItem(String product) {
-        Optional<Item> itemOptional = listBasedRepository.getItemByName(product);
+    public ItemEntity getItem(int itemId) {
+        Optional<ItemEntity> itemOptional = itemRepository.findById(itemId);
         if (itemOptional.isEmpty()) {
-            System.out.println("Could not get item with product" + product);
+            System.out.println("Could not get item with product" + itemId);
             throw new IllegalArgumentException("Could not get item");
         }
         return itemOptional.get();
     }
 
-    public Item deleteItem(String itemName) {
-        Optional<Item> deletedItemOptional = listBasedRepository.deleteItem(itemName);
-        if (deletedItemOptional.isEmpty()) {
-            System.out.println("Could not delete item with name " + itemName);
-            throw new IllegalArgumentException("Could not delete item");
-        }
-        return deletedItemOptional.get();
+    public List<ItemEntity> getAllItems() {
+        return itemRepository.findAll();
     }
 
-    public List<Item> getAllItems() {
-        return listBasedRepository.getAll();
+    public ItemEntity updateItem(int itemId, String newName, int newQuantityId, CategoryEntity newCategory) {
+        return itemRepository.findById(itemId)
+                .map(item -> {
+                    if (!quantityService.doesQuantityExist(newQuantityId)) {
+                        System.out.println("Could not update item - quantity with ID " + newQuantityId + " not found.");
+                        throw new IllegalArgumentException("Quantity not found");
+                    }
+
+                    ItemEntity toBeUpdated = item.toBuilder()
+                            .name(newName)
+                            .quantityEntity(quantityService.getQuantity(newQuantityId))
+                            .categoryEntity(newCategory)
+                            .build();
+
+                    return itemRepository.save(toBeUpdated);
+                })
+                .orElseThrow(() -> {
+                    System.out.println("Could not update item with ID: " + itemId);
+                    return new IllegalArgumentException("Item not found");
+                });
+    }
+
+    public void deleteItem(int itemId) {
+        ItemEntity item = itemRepository.findById(itemId)
+                .orElseThrow(() -> {
+                    System.out.println("Could not delete item with ID: " + itemId);
+                    return new IllegalArgumentException("Item not found");
+                });
+
+        itemRepository.delete(item);
+    }
+
+    public boolean doesItemExits(int itemId) {
+        return itemRepository.existsById(itemId);
     }
 }

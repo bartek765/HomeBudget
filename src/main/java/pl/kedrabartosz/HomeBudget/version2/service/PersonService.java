@@ -16,16 +16,22 @@ public class PersonService {
     }
 
     public PersonEntity saveNewPerson(String personName, String personLastName, Instant joinedAt) {
+        if (personName == null || personName.isBlank() ||
+                personLastName == null || personLastName.isBlank()) {
+            throw new IllegalArgumentException("First name and last name must not be empty");
+        }
+
         PersonEntity person = PersonEntity.builder()
                 .firstName(personName)
                 .lastName(personLastName)
                 .joinedAt(joinedAt)
                 .build();
+
         return personRepository.save(person);
     }
 
     public PersonEntity getById(int personId) {
-        return Optional.ofNullable(personRepository.getReferenceById(personId))
+        return Optional.of(personRepository.getReferenceById(personId))
                 .orElseThrow(() -> {
                     System.out.println("Could not find person with ID: " + personId);
                     return new IllegalArgumentException("Person not found");

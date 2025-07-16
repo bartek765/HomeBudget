@@ -22,6 +22,11 @@ public class CategoryService {
     }
 
     public CategoryEntity saveCategory(String name, Instant createdAt, Instant lastUpdatedAt) {
+        if (categoryRepository.getByName(name) != null) {
+            System.out.println("Category with name '" + name + "' already exists.");
+            throw new IllegalArgumentException("Category already exists");
+        }
+
         CategoryEntity category = CategoryEntity.builder()
                 .name(name)
                 .createdAt(createdAt)

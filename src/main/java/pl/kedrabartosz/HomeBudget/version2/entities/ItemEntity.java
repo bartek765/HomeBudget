@@ -1,13 +1,15 @@
 package pl.kedrabartosz.HomeBudget.version2.entities;
 
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import java.util.Objects;
 
+import lombok.*;
+
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
-@Builder
+@Builder(toBuilder = true)
 @Table(name = "item")
 @Entity
 public class ItemEntity {
@@ -23,4 +25,20 @@ public class ItemEntity {
     @OneToOne
     @JoinColumn(name = "quantity_id")
     private QuantityEntity quantityEntity;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) {return true;}
+        if (o == null || getClass() != o.getClass()) {return false;}
+        ItemEntity that = (ItemEntity) o;
+        return Objects.equals(id, that.id) && Objects.equals(name, that.name) && Objects.equals(
+            categoryEntity,
+            that.categoryEntity
+        ) && Objects.equals(quantityEntity, that.quantityEntity);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(id, name, categoryEntity, quantityEntity);
+    }
 }

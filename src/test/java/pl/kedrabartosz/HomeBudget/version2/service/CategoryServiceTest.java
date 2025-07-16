@@ -1,4 +1,4 @@
-package pl.kedrabartosz.HomeBudget.service;
+package pl.kedrabartosz.HomeBudget.version2.service;
 
 import java.time.Instant;
 import org.junit.jupiter.api.Assertions;
@@ -7,7 +7,6 @@ import org.junit.jupiter.api.Test;
 import org.mockito.Mock;
 import org.mockito.MockitoAnnotations;
 import pl.kedrabartosz.HomeBudget.version2.repositories.CategoryRepository;
-import pl.kedrabartosz.HomeBudget.version2.service.CategoryService;
 
 import java.util.List;
 import pl.kedrabartosz.HomeBudget.version2.entities.CategoryEntity;
