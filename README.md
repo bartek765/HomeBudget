@@ -31,6 +31,9 @@ The project uses:
 - Lombok
 - Git & GitHub
 - Testing: JUnit 5, Mockito
+- PostgreSQL
+- CI/CD pipeline (GitHub Actions)
+- Deployment using Docker and Render
 - REST API (planned)
 
 ## 📦 Architecture
@@ -43,10 +46,7 @@ The application follows the Repository + Service pattern:
 
 ## 🔧 Planned Extensions
 
-- PostgreSQL database integration
 - REST API endpoints
-- CI/CD pipeline (GitHub Actions)
-- Deployment using Docker and Render
 
 ## 🚀 Running the App
 
