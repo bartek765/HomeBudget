@@ -9,17 +9,19 @@ import pl.kedrabartosz.HomeBudget.version2.entities.CostEntity;
 import pl.kedrabartosz.HomeBudget.version2.entities.ItemEntity;
 import pl.kedrabartosz.HomeBudget.version2.repositories.CostRepository;
 
-import java.time.Instant;
+import java.math.BigDecimal;
+import java.time.LocalDate;
 import java.util.List;
 
+import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.*;
 
 class CostServiceTest {
 
     private static final int ANY_COST_ID = 1;
     private static final int ANY_ITEM_ID = 2;
-    private static final double ANY_PRICE = 123.45;
-    private static final Instant ANY_DATE = Instant.now();
+    private static final BigDecimal ANY_PRICE = BigDecimal.valueOf(123.45);
+    private static final LocalDate ANY_DATE = LocalDate.now();
 
     private CostService costService;
 
@@ -76,19 +78,20 @@ class CostServiceTest {
         when(itemService.doesItemExits(eq(ANY_ITEM_ID))).thenReturn(true);
         when(itemService.getItem(eq(ANY_ITEM_ID))).thenReturn(itemEntity);
 
-        CostEntity builtCost = CostEntity.builder()
-                .price(ANY_PRICE)
-                .effectiveDate(ANY_DATE)
-                .itemEntity(itemEntity)
-                .build();
-
-        when(costRepository.save(eq(builtCost))).thenReturn(builtCost);
+        // zwracamy to, co przyszło do save – wygodny wzorzec w testach
+        when(costRepository.save(any(CostEntity.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
         var result = costService.saveNewCost(ANY_PRICE, ANY_DATE, ANY_ITEM_ID);
 
         // then
-        Assertions.assertEquals(builtCost, result);
+        Assertions.assertNotNull(result);
+        Assertions.assertEquals(ANY_PRICE, result.getPrice());
+        Assertions.assertEquals(ANY_DATE, result.getEffectiveDate());
+        Assertions.assertEquals(itemEntity, result.getItemEntity());
+
+        verify(costRepository).save(any(CostEntity.class));
     }
 
     @Test
@@ -103,34 +106,34 @@ class CostServiceTest {
         Assertions.assertEquals(costEntity1, result);
     }
 
-
     @Test
     public void shouldUpdateCost() {
-        // given
+        // given – obecny stan w bazie
         CostEntity current = CostEntity.builder()
                 .id(ANY_COST_ID)
-                .price(4.99d)
-                .effectiveDate(Instant.MIN)
+                .price(BigDecimal.valueOf(4.99))
+                .effectiveDate(ANY_DATE.minusDays(1))
                 .itemEntity(itemEntity)
                 .build();
+
         when(costRepository.getReferenceById(eq(ANY_COST_ID))).thenReturn(current);
 
-        CostEntity expected = CostEntity.builder()
-                .id(ANY_COST_ID)
-                .price(ANY_PRICE)
-                .effectiveDate(ANY_DATE)
-                .itemEntity(itemEntity)
-                .build();
 
-        when(costRepository.save(eq(expected))).thenReturn(expected);
+        when(costRepository.save(any(CostEntity.class)))
+                .thenAnswer(invocation -> invocation.getArgument(0));
 
         // when
         var updated = costService.updateCost(ANY_COST_ID, ANY_PRICE, ANY_DATE, ANY_ITEM_ID);
 
         // then
-        Assertions.assertEquals(expected, updated);
-    }
+        Assertions.assertNotNull(updated);
+        Assertions.assertEquals(ANY_COST_ID, updated.getId());
+        Assertions.assertEquals(ANY_PRICE, updated.getPrice());
+        Assertions.assertEquals(ANY_DATE, updated.getEffectiveDate());
+        Assertions.assertEquals(itemEntity, updated.getItemEntity());
 
+        verify(costRepository).save(any(CostEntity.class));
+    }
 
     @Test
     public void shouldDeleteCost() {

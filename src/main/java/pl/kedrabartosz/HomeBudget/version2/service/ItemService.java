@@ -17,7 +17,6 @@ public class ItemService {
 
 
     public ItemService(@Autowired ItemRepository itemRepository, @Autowired QuantityService quantityService) {
-        // = to przypisanie = to jest włąśnie wstrzykiwanie zależności
         this.itemRepository = itemRepository;
         this.quantityService = quantityService;
     }

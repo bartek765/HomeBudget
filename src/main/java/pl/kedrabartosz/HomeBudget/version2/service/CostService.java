@@ -8,7 +8,9 @@ import pl.kedrabartosz.HomeBudget.version2.entities.CostEntity;
 import pl.kedrabartosz.HomeBudget.version2.entities.ItemEntity;
 import pl.kedrabartosz.HomeBudget.version2.repositories.CostRepository;
 
+import java.math.BigDecimal;
 import java.time.Instant;
+import java.time.LocalDate;
 import java.util.List;
 import java.util.Optional;
 
@@ -23,7 +25,7 @@ public class CostService {
         this.itemService = itemService;
     }
 
-    public CostEntity saveNewCost(double price, Instant effectiveDate, int itemId) {
+    public CostEntity saveNewCost(BigDecimal price, LocalDate effectiveDate, int itemId) {
         if (itemService.doesItemExits(itemId)) {
             CostEntity cost = CostEntity.builder()
                     .price(price)
@@ -48,7 +50,7 @@ public class CostService {
         return costRepository.findAll();
     }
 
-    public CostEntity updateCost(int costId, double newPrice, Instant newEffectiveDate, int newItemId) {
+    public CostEntity updateCost(int costId, BigDecimal newPrice, LocalDate newEffectiveDate, int newItemId) {
         return Optional.of(costRepository.getReferenceById(costId))
                 .map(cost -> {
                   CostEntity toBeUpdated = cost.toBuilder()

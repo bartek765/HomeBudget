@@ -1,13 +1,13 @@
 package pl.kedrabartosz.HomeBudget.version2.entities;
 
 import jakarta.persistence.*;
-import java.util.Objects;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.Setter;
+import lombok.*;
 
-import java.time.Instant;
+import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.util.Objects;
+
+@Getter
 @Setter
 @NoArgsConstructor
 @AllArgsConstructor
@@ -15,27 +15,40 @@ import java.time.Instant;
 @Table(name = "cost")
 @Entity
 public class CostEntity {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id")
     private Integer id;
-    @Column(name = "price")
-    private double price;
-    @Column(name = "effective_date")
-    private Instant effectiveDate;
+
+    @Column(
+            name = "price",
+            nullable = false,
+            precision = 10,
+            scale = 2
+    )
+    private BigDecimal price;
+
+    @Column(name = "effective_date", nullable = false)
+    private LocalDate effectiveDate;
+
     @ManyToOne
-    @JoinColumn(name = "item_id") // to jest fk
+    @JoinColumn(name = "item_id", nullable = false)
     private ItemEntity itemEntity;
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {return true;}
-        if (o == null || getClass() != o.getClass()) {return false;}
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         CostEntity that = (CostEntity) o;
-        return Double.compare(price, that.price) == 0 && Objects.equals(id, that.id) && Objects.equals(
-            effectiveDate,
-            that.effectiveDate
-        ) && Objects.equals(itemEntity, that.itemEntity);
+        return Objects.equals(id, that.id)
+                && Objects.equals(price, that.price)
+                && Objects.equals(effectiveDate, that.effectiveDate)
+                && Objects.equals(itemEntity, that.itemEntity);
     }
 
     @Override
@@ -46,10 +59,10 @@ public class CostEntity {
     @Override
     public String toString() {
         return "CostEntity{" +
-               "id=" + id +
-               ", price=" + price +
-               ", effectiveDate=" + effectiveDate +
-               ", itemEntity=" + itemEntity +
-               '}';
+                "id=" + id +
+                ", price=" + price +
+                ", effectiveDate=" + effectiveDate +
+                ", itemEntity=" + itemEntity +
+                '}';
     }
 }

@@ -1,13 +1,15 @@
 package pl.kedrabartosz.HomeBudget.version2.entities;
 
 import jakarta.persistence.*;
+
 import java.util.Objects;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+
+import lombok.*;
 
 import java.time.Instant;
 
+@Getter
+@Setter
 @NoArgsConstructor
 @AllArgsConstructor
 @Builder
@@ -27,12 +29,16 @@ public class PersonEntity {
 
     @Override
     public boolean equals(Object o) {
-        if (this == o) {return true;}
-        if (o == null || getClass() != o.getClass()) {return false;}
+        if (this == o) {
+            return true;
+        }
+        if (o == null || getClass() != o.getClass()) {
+            return false;
+        }
         PersonEntity that = (PersonEntity) o;
         return Objects.equals(id, that.id) && Objects.equals(firstName, that.firstName) && Objects.equals(
-            lastName,
-            that.lastName
+                lastName,
+                that.lastName
         ) && Objects.equals(joinedAt, that.joinedAt);
     }
 
