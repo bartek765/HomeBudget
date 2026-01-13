@@ -24,7 +24,6 @@ public class HomeBudgetApplication {
                 .joinedAt(Instant.now())
                 .build();
         PersonEntity kolejnaosoba = PersonEntity.builder().firstName("antek").lastName("ojooj").joinedAt(Instant.now()).build();
-
         PersonRepository personRepository = context.getBean(PersonRepository.class);
         System.out.println(personRepository.save(personToBeSaved));
         System.out.println(personRepository.save(kolejnaosoba));
